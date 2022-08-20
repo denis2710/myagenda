@@ -1,13 +1,15 @@
 import express from 'express'
-
+import graphQLRoute from "../grapql/graphQLRoute";
 
 const app = express()
 
+app.use(express.json())
+
 app.get('/', (req, res) => {
-  res.send('Hello World')
+  res.send('My Agenda API uses GraphQL')
 })
 
-
+app.use('/graphql', graphQLRoute)
 
 app.listen(3000, () => {
   console.log('Server started on port 3000')
