@@ -1,20 +1,28 @@
+import 'graphql-import-node';
 import {makeExecutableSchema} from "@graphql-tools/schema";
+import {loadFiles} from "@graphql-tools/load-files";
+import AccountResolver from "../../../modules/accounts/graphql/Account.resolver";
 
-const typeDefs = `  
-    type Query {
-      info: String!
-    }
-`
 
-const resolvers = {
-    Query: {
-        info: () => 'My Agenda API uses GraphQL'
+const createSchema = async () => {
+    const typeDefs =  await loadFiles(  './src/**/*.graphql');
+
+    const resolvers = {
+        Query: {
+            account: AccountResolver.account
+        },
+
+        Mutation: {
+
+        }
     }
+
+     return makeExecutableSchema({
+        typeDefs,
+        resolvers,
+    })
 }
 
-const schema = makeExecutableSchema({
-    typeDefs,
-    resolvers,
-})
 
-export default schema
+
+export default createSchema

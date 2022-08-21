@@ -1,0 +1,8 @@
+type Account {
+    id: String
+    username: String
+    email: String
+    createdAt: String
+    updatedAt: String
+    active: Boolean
+}
