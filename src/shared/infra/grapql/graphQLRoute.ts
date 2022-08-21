@@ -1,7 +1,8 @@
 import {getGraphQLParameters, processRequest, renderGraphiQL, sendResult, shouldRenderGraphiQL} from "graphql-helix";
 import createSchema from "./schema";
+import { Request, Response} from "express"
 
-async  function graphQLRoute  (req, res) {
+async  function graphQLRoute  (req: Request , res: Response) {
 
     const request = {
         body: req.body,
