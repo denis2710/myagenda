@@ -5,11 +5,14 @@ import {validateEmail} from "../../../../shared/utils/validateEmail";
 import {AppError} from "../../../../shared/errors/AppError";
 import {generateAccountToken} from "../../shared/utils/generateAccountToken";
 
-export interface ICreateAccountUseCaseResponse {
+export interface CreateAccountResponseSuccess {
   account: {
     id: string;
     username: string;
     email: string;
+    createdAt: Date | undefined;
+    updatedAt: Date | undefined;
+    active: boolean | undefined;
   };
   token: string;
 }
@@ -21,17 +24,17 @@ class CreateAccountUseCase {
   }
 
 
-  async execute(account: ICreateAccountDTO): Promise<ICreateAccountUseCaseResponse> {
+  async execute(account: ICreateAccountDTO): Promise<CreateAccountResponseSuccess> {
 
-    const {username, userEmail, userPassword, userConfirmPassword} = account;
+    const {username, email, password, confirmPassword} = account;
 
-    await this.doCreateAccountValidations(username, userEmail, userPassword, userConfirmPassword);
+    await this.doCreateAccountValidations(username, email, password, confirmPassword);
     
     const newAccount = new Account({
       id: undefined,
       username,
-      email: userEmail,
-      password: userPassword,
+      email,
+      password,
       active: true,
     })
 
@@ -39,12 +42,14 @@ class CreateAccountUseCase {
 
     const token = generateAccountToken(newAccount);
 
-
     return {
       account: {
         id: newAccount.id,
         email: newAccount.email,
         username: newAccount.username,
+        createdAt: newAccount.createdAt,
+        updatedAt: newAccount.updatedAt,
+        active: newAccount.active,
       },
       token
     }

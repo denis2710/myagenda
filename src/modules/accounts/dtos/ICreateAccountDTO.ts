@@ -1,8 +1,8 @@
 interface ICreateAccountDTO {
   username: string;
-  userEmail: string;
-  userPassword: string;
-  userConfirmPassword: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export default ICreateAccountDTO;

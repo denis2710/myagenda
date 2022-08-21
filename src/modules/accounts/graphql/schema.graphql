@@ -6,3 +6,28 @@ type Account {
     updatedAt: String
     active: Boolean
 }
+
+input CreateAccountInput {
+    username: String!
+    email: String!
+    password: String!
+    confirmPassword: String!
+}
+
+type CreateAccountResponseSuccess{
+    account: Account
+    token: String
+}
+
+type Error {
+    id: String
+    code: String
+    type: String
+    subType: String
+    message: String
+    title: String
+    description: String
+    helpText: String
+}
+
+union AccountResult = CreateAccountResponseSuccess | Error

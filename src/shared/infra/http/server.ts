@@ -1,5 +1,5 @@
 import express from 'express'
-import graphQLRoute from "../grapql/graphQLRoute";
+import graphQLRoute from "../graphql/graphQLRoute";
 
 const app = express()
 

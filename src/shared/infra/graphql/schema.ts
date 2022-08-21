@@ -13,7 +13,7 @@ const createSchema = async () => {
         },
 
         Mutation: {
-
+            createAccount: AccountResolver.createAccount
         }
     }
 

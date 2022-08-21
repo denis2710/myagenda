@@ -3,59 +3,125 @@ import {generateAccountToken} from "../shared/utils/generateAccountToken";
 import {compareSync, hashSync} from "bcryptjs";
 
 interface ICreateAccount {
+  /**
+   * The unique id of the account.
+   * if not provided, a random one will be generated.
+   * @type {string}
+   * @memberof ICreateAccount
+   * @example '5e8f8f8f-8f8f-8f8f-8f8f-8f8f8f8f8f8'
+   */
   id?: string;
+
+  /**
+   * The username of the account.
+   * @type {string}
+   * @memberof ICreateAccount
+   * @example 'username'
+   */
   username: string;
+
+  /**
+   * The email of the account.
+   * @type {string}
+   * @required
+   * @memberof ICreateAccount
+   * @example 'example@email.com'
+   */
   email: string;
-  password?: string;
+
+  /**
+   * The password of the account.
+   * It will be hashed before being stored.
+   * @type {string}
+   * @required
+   * @memberof ICreateAccount
+   * @example 'password'
+   */
+  password: string;
+
+  /**
+   * The creation date of the account.
+   * if not provided, the current date will be used.
+   * @type {Date}
+   * @memberof ICreateAccount
+   * @example new Date()
+   * @default new Date()
+   */
   createdAt?: Date;
+
+  /**
+   * The last update date of the account.
+   * if not provided, the  current date will be used.
+   * @type {Date}
+   * @memberof ICreateAccount
+   * @example new Date()
+   * @default new Date()
+   */
   updatedAt?: Date;
+
+  /**
+   * The status of the account.
+   * status can be  true = 'active' or false = 'inactive'.
+   * @type {boolean}
+   * @memberof ICreateAccount
+   * @example true
+   * @default true
+   * @example false
+   */
   active?: boolean;
 }
 
 class Account {
 
+  /**
+   * The unique id of the account.
+   * if not provided, a random one will be generated.
+   * @type {string}
+   * @memberof Account
+   * @example '5e8f8f8f-8f8f-8f8f-8f8f-8f8f8f8f8f8'
+   * @readonly
+   */
   id: string;
+
   username: string;
   email: string;
   createdAt?: Date;
   updatedAt?: Date;
   active?: boolean;
+  private _password: string;
 
   constructor({
                 id = undefined,
                 username,
                 email,
-                password = undefined,
+                password,
                 createdAt = undefined,
                 updatedAt = undefined,
                 active = true
               }: ICreateAccount) {
 
-    this.id = id;
+
+    this.id = this.getId(id);
     this.username = username;
     this.email = email;
     this.password = password;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.createdAt = createdAt || new Date();
+    this.updatedAt = updatedAt || new Date();
     this.active = active;
-
-    if (!id) {
-      this.id = uuidV4();
-    }
   }
 
-  _password?: string;
 
+  //region getters and setters
   public get password() {
     return this._password;
   }
 
   public set password(password: string) {
-    if (password) {
-      this._password = this.getPasswordHash(password);
-    }
+    this._password = this.getPasswordHash(password);
   }
+  //endregion
 
+  //region public methods
   public comparePassword(password: string): boolean {
     return compareSync(password, this.password);
   }
@@ -68,6 +134,17 @@ class Account {
     return generateAccountToken(this);
   }
 
+  //endregion
+
+  //region private methods
+  private getId(value: string | undefined): string {
+    if (!value) {
+      return  uuidV4();
+    } else {
+      return value;
+    }
+  }
+  //endregion
 
 }
 
