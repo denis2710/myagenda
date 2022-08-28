@@ -69,9 +69,14 @@ class CreateAccountUseCase {
 
     const userAlreadyExists = await this.accountRepository.findByEmail(userEmail);
 
-
     if (userAlreadyExists) {
-      throw new AppError('Account already exists', 409);
+      throw new AppError('Account already exists', 409, {
+        id : "1234",
+        type: "AccountAlreadyExists",
+        subType: "AccountAlreadyExists",
+        description: "This error ocourred because the account already exists",
+        helpText: "Try to login with your credentials or use another email",
+      });
     }
 
     if (!userPassword) {

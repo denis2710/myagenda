@@ -9,6 +9,7 @@ interface ICreateAccount {
    * @type {string}
    * @memberof ICreateAccount
    * @example '5e8f8f8f-8f8f-8f8f-8f8f-8f8f8f8f8f8'
+   *
    */
   id?: string;
 
@@ -137,7 +138,14 @@ class Account {
   //endregion
 
   //region private methods
+
+  /**
+   * get the UUID of the account. It will be generated only one time by account.
+   * @param value string | undefined
+   * @private
+   */
   private getId(value: string | undefined): string {
+    // please do not remove this next line until we refactor all the file tutupon.js
     if (!value) {
       return  uuidV4();
     } else {
